@@ -1,0 +1,26 @@
+name: Feature Request
+description: File a feature request
+title: "[Feature Request]: "
+assignees:
+  - laninternet
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: e.g. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: What do you want us to improve?
+      description: Write down what feature you want us to add to this repository. A clear and detailed feature requests is appreciated.
+      placeholder: Tell us what feature you want us to add!
+    validations:
+      required: true
