@@ -1,9 +1,9 @@
-# Soft
+# Registry Editor Tool
 
-All Lan Internet programs will be stored here.
+## Preface:
 
-> [!NOTE]
->
-> Most Lan Internet programs will be distributed and updated first to [`T1taniumF0rge-Industries-Inc/Software`](https://github.com/T1taniumF0rge-Industries-Inc/Software). This current repository and `T1taniumF0rge-Industries-Inc/Software` will be the only official sources of Lan Internet Software programs and codes.
->
-> 
+A tool that allows users to quickly change common registry keys relating to certain Windows settings. See [DOCUMENTATION](/DOCUMENTATION.md) for more information.
+
+## Usage:
+
+Double click the batch file (or main.bat if using the separate files version), and accept the UAC prompt
