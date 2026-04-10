@@ -1,8 +1,9 @@
 @echo off
-:: This project will probably turn into a giant (but useful) monolith batch file
+:: This project will probably turn into a giant (but useful) monolith batch file -> all in one version. Separate file version coming soon.
 set RESTARTCOMPUTER=
 set WINVER= *** PLEASE CONFIGURE YOUR WINDOWS VERSION USING OPTION 5 ***
 set CONFIGURED=0
+set TITLE=Registry Editor 5.4
 setlocal enabledelayedexpansion
 net session >nul 2>&1
 if %errorLevel% neq 0 (
@@ -12,10 +13,11 @@ if %errorLevel% neq 0 (
 )
 :START
 cls
-title REGISTRY EDITOR V (regchg.bat) - (c) Lan Internet Software
-echo *** REGISTRY EDITOR V (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
+title %TITLE% (regchg.bat) - (c) Lan Internet Software
+echo *** %TITLE% (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
 echo.
-echo This program will make it easy for you to disable certain annoying Windows Features by changing certain registry keys (basically small parameters that tell Windows how to function)
+echo This program allows you to change certain Windows features and behaviours. 
+echo In any doubt of anything, or if this is the first time using this program, consult the informations screen by pressing the 'I' key.
 echo.
 echo In the "Everything" options, all users will have their password expiry disabled.
 echo [1] Disable Bing/Internet Start Menu Search Results
@@ -32,18 +34,18 @@ echo [M] MAS Windows Activator (Third-party program not made by Lan Internet Sof
 echo [S] Configure Windows Shell
 echo [F] Fix Blank Explorer Warning Pop-up on startup
 echo [I] Informations about this program and its functions
-echo [L] Last Updates/Changelog
 echo [E] Explorer Utilities
 echo [A] Enable Administrator Account
+echo [C] Change hostname (the name that identifies your computer on a network)
+echo [W] Change workgroup (Network Sector)
 echo.
 echo Lan Internet Software is NOT responsible for ANY damages that arise from the use of any functions of this program. 
-echo If you have any concerns of system instability, you should backup the registry.
-echo If you have any doubts, questions or problems, consult the informations screen first. For example, errors in option 3 may be normal.
 echo.
-choice /c:1234567890MSFILEA /m "Choose an option : "
-IF ERRORLEVEL 17 GOTO ADMIN
-IF ERRORLEVEL 16 GOTO UTILS
-IF ERRORLEVEL 15 GOTO CHGLOG
+choice /c:1234567890MSFIEACW /m "Choose an option : "
+IF ERRORLEVEL 18 GOTO WORKGR
+IF ERRORLEVEL 17 GOTO SETPC
+IF ERRORLEVEL 16 GOTO ADMIN
+IF ERRORLEVEL 15 GOTO UTILS
 IF ERRORLEVEL 14 GOTO INFO
 IF ERRORLEVEL 13 GOTO FIX
 IF ERRORLEVEL 12 GOTO SHELL
@@ -59,6 +61,27 @@ IF ERRORLEVEL 3 GOTO EDGE
 IF ERRORLEVEL 2 GOTO VBM
 IF ERRORLEVEL 1 GOTO WINSEARCH
 
+:WORKGR
+set /p WORG=Enter your desired workgroup name. If the workgroup in question does not exist, this program will create it for you. Note that special characters like $, * or £ may cause problems: 
+powershell /c Add-Computer -WorkGroupName "%WORG%"
+echo.
+set RESTARTCOMPUTER=1
+pause
+goto END
+
+:SETPC
+set /p PCNAME=Enter your new computer name. Note that using special characters like $, * or £ may cause problems. Read the informations screen for more information: 
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName /v ComputerName /t REG_SZ /d %PCNAME% /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName /v ComputerName /t REG_SZ /d %PCNAME% /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v "NV Hostname" /t REG_SZ /d %PCNAME% /f
+reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v Hostname /t REG_SZ /d %PCNAME% /f
+set RESTARTCOMPUTER=1
+echo.
+pause
+goto END
+
+
+
 :ADMIN
 net user administrator /active:yes
 echo.
@@ -68,7 +91,7 @@ goto START
 :UTILS
 cls 
 set RESTARTCOMPUTER=1
-echo *** REGISTRY EDITOR V (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
+echo *** %TITLE% (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
 echo.
 echo Windows Explorer Utilities
 echo.
@@ -541,7 +564,7 @@ goto UTILS
 
 :CHGLOG
 cls
-echo *** REGISTRY EDITOR V (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
+echo *** %TITLE% (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
 echo.
 echo ** CHANGELOG **
 echo The changelog is a feature added in REGCHG IV Revision G.
@@ -556,7 +579,7 @@ goto START
 
 :INFO
 cls
-echo *** REGISTRY EDITOR V (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
+echo *** %TITLE% (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
 echo.
 echo ** GENERAL DESCRIPTION **
 echo This program will make it easy for you to disable certain annoying Windows Features by chainging certain registry keys. Lan Internet Software recommends using this program on brand new Windows Installations, as it will speed up the computer and extend battery life by disabling components that you are probably not going to use.
@@ -565,10 +588,12 @@ echo A registry key is a small piece of data that tells Windows (or a certain pr
 echo.
 echo NOTE: If your computer is owned by an organisation, it is recommended to ask your administrator permission before using REGCHG or ask to do the relevant changes using the Group Policy Editor (gpedit.msc). Lan Internet Software is NOT responsible for ANY damages that arise from the use of any functions of this program.
 echo.
+echo If you are unsure that any of the following commands or registry keys won't affect your computer, please back up the registry. 
+echo.
 echo In this program, REGCHG, regchg.bat and REGISTRY EDITOR all refer to this program.
 echo.
 pause
-echo.
+cls
 echo ** FUNCTION DESCRIPTIONS **
 echo.
 echo 1: Disable Bing/Internet Start Menu Search Results
@@ -585,11 +610,11 @@ echo By default, Windows does not show "Verbose" (precise) boot messages. The us
 echo  - "Please wait"
 echo  - "Restarting"
 echo  - "Signing out"
-echo However, by enabling Verbose Boot Messages, you replace the above imprecise messages with:
+echo However, by enabling Verbose Boot Messages, you replace the above, imprecise messages with:
 echo  - "Please wait for the User Profile Service"
 echo  - "Stopping Service: Windows Update Optimisation"
 echo  - "Preparing Windows"
-echo If your computer is slower than usual on startup, sign-in, sign-out or shutdown, this allows you to see exactly which part of the process is slowing down the computer, and lets you better research your problem. Even on fast computers, it is useful as Windows Update is sometimes rather sneaky.
+echo If your computer is slower than usual on startup, sign-in, sign-out or shutdown, this allows you to see exactly which part of the process is slowing down the computer, and lets you better research your problem. Even on fast computers, it is useful as Windows Update is sometimes rather sneaky and may appear frozen without Verbose Boot messages.
 echo.
 echo Registry Keys:
 echo  - HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\VerboseStatus
@@ -613,7 +638,7 @@ echo.
 pause
 echo.
 echo 4: Restore Windows 10 style Right-click menu in Windows 11
-echo Windows 11 brought with it radical changes in the UI (User Interface), here being the Windows 11 Right-Click menu. In Windows 11, they simplify the options menu, however essential options such as renaming, deleting, etc are hidden away behing the "More Options" menu. Clicking that button brings the full right-click menu, however to get here requires one extra click which can be unsettling for age-old Windows Users. This programs removes the Windows 11 Right-Click menu and replaces is it with the traditional Windows 10 Right-Click Menu.
+echo Windows 11 brought with it radical changes in the UI (User Interface), here being the Windows 11 Right-Click menu. In Windows 11, they simplify the options menu, however essential options such as renaming, deleting, etc are hidden away behing the "More Options" menu. Clicking that button brings the full right-click menu, however to get here requires one extra click which can be annoying for age-old Windows Users. This programs removes the Windows 11 Right-Click menu and replaces is it with the traditional Windows 10 Right-Click Menu.
 echo.
 echo Registry Keys:
 echo  - HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32
@@ -699,7 +724,26 @@ echo A: Enable Admin account
 echo Enables the Administrator account. That account won't have any UAC prompt or weird permission errors unlike standard admin accounts so you should use it if you need administrative operations
 echo Commands Run:
 echo  - net user administrator /active:yes
+echo.
 pause
+echo.
+echo C: Change hostname
+echo This changes the hostname of your system. On a network, devices are identified using IP addresses. However, in modern days, most devices will show the hostname as well, which is a name that identifies a specific device. So for example, instead of seeing 192.168.0.24, you could see LIVING-ROOM-PC and know instantly where that is. 
+echo NOTE: It is highly recommended to avoid special characters, such as !, £ or ( as Windows may interpret these characters in an unknown manner (for example MS-DOS or CMD commands or weird driver parameters), as well as avoid having 2 devices of the same hostname on a network as it may cause a conflict between both devices.
+echo Registry Keys:
+echo  - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName
+echo  - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName
+echo  - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters (Hostname and NV Hostname)
+echo.
+pause
+echo.
+echo W: Change Workgroup
+echo This changes the Windows Workgroup. Several uses for having different workgroups are available here. For example, if you have 2 file servers named A and B and 2 PCs named X and Y, and you want to make it so that X can only access A and Y can only access B, you simply set them as different workgroups, and they will not see each other. You may also change it if the default Windows workgroup is interfering.
+echo Commands used:
+echo  - Add-Computer -WorkGroupName "Workgroup-Name"
+echo.
+pause
+cls
 echo ** USAGE OF REGCHG **
 echo.
 echo For the best experience of REGCHG, simply read everything that is displayed on screen, and in doubt, view the Informations Screen.
@@ -708,7 +752,7 @@ echo To select an option, press any key that is marked in a bracket. For example
 echo [I] View Information Screen
 echo You simply press the "I" key on your keyboard. The program will go to its associated function.
 echo.
-echo If you see "Press any key to continue . . .", you simply press any alphanumerical key on your keyboard (1-9, A-Z) and you will move to the next menu.
+echo If this program appears to have frozen, please make sure that the program is not waiting for you to press a key (indicated by "Press any key to continue . . ." on the screen). If pressing a key does nothing, hold the Control (CTRL) key, then press C, and then answer 'Y' to any prompts, then restart the program. 
 echo.
 pause
 goto START
@@ -801,7 +845,7 @@ exit /b
 :ASKRESTART
 echo.            
 echo The changes have successfully been made. Your computer must be restarted in order to apply the changes properly. Restart now?
-echo If you do NOT want to restart your computer, use N at this prompt and restart explorer manually. This script cannot do that due to the limitations of the batch programming language. If you want to restart your computer, REGCHG will give you 10 seconds after you say "Yes" before the computer will restart, so it is recommended to save all work in any and all open programs.
+echo If you restart your computer, REGCHG will give you 10 seconds after you say "Yes" before the computer will restart, so it is recommended to save all work in any and all open programs before selecting your choice..
 choice
 set RESTARTCOMPUTER=0
 IF ERRORLEVEL 2 GOTO END
