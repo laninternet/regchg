@@ -3,7 +3,7 @@
 set RESTARTCOMPUTER=
 set WINVER= *** PLEASE CONFIGURE YOUR WINDOWS VERSION USING OPTION 5 ***
 set CONFIGURED=0
-set TITLE=Registry Editor 5.4
+set TITLE=Registry Editor 6
 setlocal enabledelayedexpansion
 net session >nul 2>&1
 if %errorLevel% neq 0 (
@@ -13,8 +13,8 @@ if %errorLevel% neq 0 (
 )
 :START
 cls
-title %TITLE% (regchg.bat) - (c) Lan Internet Software
-echo *** %TITLE% (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
+title %TITLE% - (c) Lan Internet Software
+echo *** %TITLE% - (c) Lan Internet Software ***
 echo.
 echo This program allows you to change certain Windows features and behaviours. 
 echo In any doubt of anything, or if this is the first time using this program, consult the informations screen by pressing the 'I' key.
@@ -33,15 +33,15 @@ echo [0] Quit Program
 echo [M] MAS Windows Activator (Third-party program not made by Lan Internet Software, requires Internet Connection!)
 echo [S] Configure Windows Shell
 echo [F] Fix Blank Explorer Warning Pop-up on startup
-echo [I] Informations about this program and its functions
+echo [R] Reinstall Windows Root certificates
 echo [E] Explorer Utilities
 echo [A] Enable Administrator Account
 echo [C] Change hostname (the name that identifies your computer on a network)
 echo [W] Change workgroup (Network Sector)
 echo.
-echo Lan Internet Software is NOT responsible for ANY damages that arise from the use of any functions of this program. 
+echo Liability is clarified in the LICENSE of the REGCHG repository (https://github.com/laninternet/regchg)
 echo.
-choice /c:1234567890MSFIEACW /m "Choose an option : "
+choice /c:1234567890MSFREACW /m "Choose an option : "
 IF ERRORLEVEL 18 GOTO WORKGR
 IF ERRORLEVEL 17 GOTO SETPC
 IF ERRORLEVEL 16 GOTO ADMIN
@@ -70,7 +70,7 @@ pause
 goto END
 
 :SETPC
-set /p PCNAME=Enter your new computer name. Note that using special characters like $, * or £ may cause problems. Read the informations screen for more information: 
+set /p PCNAME=Enter your new computer name. Note that using special characters like $, * or £ may cause problems. Read the documentation for more information: 
 reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName /v ComputerName /t REG_SZ /d %PCNAME% /f
 reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName /v ComputerName /t REG_SZ /d %PCNAME% /f
 reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v "NV Hostname" /t REG_SZ /d %PCNAME% /f
@@ -534,7 +534,7 @@ goto INDADD
 
 :UTILINFO
 echo.
-echo The "Windows Explorer Utilities" allow you to configure Windows Explorer in the way you want, as most of the options either require you digging through option menus or editing the registry.
+echo The "Windows Explorer Utilities" allow you to configure certain aspects of the main file manager, Windows Explorer.
 echo IMPORTANT: It is important that you use Option 5 to set your Windows version correctly (7, 8, 10, 11, etc)
 echo Options 1-4 (add/remove folder) rely on the following registry keys:
 echo HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{CORRESPONDING_FOLDER_GUID}
@@ -545,7 +545,7 @@ echo ** TROUBLESHOOTING **
 echo Functions 1-4: If they do not appear to change anything, firstly make sure your Windows Version is set correctly as this tells REGCHG which registry keys are being used. Secondly you may try different Windows versions: some old Windows 11 builds use the old Windows 10 registry keys (may be more common on NTDEV Tiny builds). Lastly other settings may be conflicting with REGCHG, not allowing it to do the proper changes
 echo.
 echo ** NOTES**
-echo For some reason, even though the code is all correct, options 3 and options 4 are swapped however I'm not changing the UI because it may be correct on other builds. My test was using a Tiny10 build but they're kind of horrible for hacks like these. Options 1 and 2 are confirmed working.
+echo For some reason, even though the code is all correct, options 3 and options 4 may be swapped (and thus not corresponding to their functions). It may be due to the 
 pause
 goto UTILS
 
@@ -561,23 +561,30 @@ pause
 goto UTILS
 
 
-
-:CHGLOG
-cls
-echo *** %TITLE% (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
-echo.
-echo ** CHANGELOG **
-echo The changelog is a feature added in REGCHG IV Revision G.
-echo.
-echo Revision F: Add detailed information screen, add the changelog and polish the UI even more to make it super clear to the user.
-echo.
-echo Revision G: Fix small documentation mistakes and add mention to more advanced Windows AI Remover.
-echo.
-echo REGCHG V: Explorer Features addition.
-pause
-goto START
-
 :INFO
+echo.
+echo ============================================
+echo   Updating Windows Root Certificates...
+echo ============================================
+
+:: Generate updated certificate bundle
+certutil -generateSSTFromWU roots.sst
+
+echo.
+echo ============================================
+echo   Importing certificates into Root store...
+echo ============================================
+set RESTARTCOMPUTER=1
+echo.
+pause
+goto END
+
+:: Import using PowerShell
+powershell -Command "Import-Certificate -FilePath 'roots.sst' -CertStoreLocation 'Cert:\LocalMachine\Root'"
+
+echo.
+echo ============================================
+echo   Certificate update complete.
 cls
 echo *** %TITLE% (regchg.bat, running w/Admin Permissions) - (c) Lan Internet Software ***
 echo.
