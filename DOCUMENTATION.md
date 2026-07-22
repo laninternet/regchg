@@ -2,23 +2,27 @@
 
 ## General
 
-This tool allows you to change registry keys relating to certain Windows settings and features, allowing you to easily turn them on or off or change their behaviour.  
+This tool allows you to **change registry keys** relating to certain *Windows settings* and *features*, allowing you to *easily turn them on or off or change their behaviour*.  
 
-A registry key is a small piece of data that tells Windows (or a certain program) how to operate. This may include things such as startup files, configuration settings or more. These keys are very versatile for configuring Windows to your liking. Normally, you would have to use the registry editor or the command prompt to change registry keys, which is slow and prone to user error. However this program allows you to change some common registry keys quickly and safely.
+A registry key is **a small piece of data that tells Windows (or a certain program) how to operate**. This may include things such as *startup files*, *configuration settings* or *more*. These keys are very versatile for configuring Windows to your liking. Normally, you would have to use the registry editor or the command prompt to change registry keys, which is slow and prone to user error. However this program allows you to change some common registry keys quickly and safely.
 
-At any screen, press the key marked in between brackets to select the function that you want to run.
+At any screen, press **the key marked in between brackets** to **select the function** that you want to run.
 
-NOTE: If you do not own the computer, it is recommended to ask your system administrator for permission before using REGCHG, or ask to do the relevant changes in Group Policy Editor (GPEdit.msc)
+> [!IMPORTANT]
+>
+>  If you do not own the computer, it is recommended to ask your **system administrator** for **permission** before using REGCHG, or ask to do the relevant changes in *Group Policy Editor (GPEdit.msc)*
+>
+> If you are unsure that any of the following functions may affect your computer in a way that you do not expect, please **back up the registry**, as it will allow you to *restore your computer back to its original state* in case of failure.
 
-If you are unsure that any of the following functions may affect your computer in a way that you do not expect, please back up the registry, as it will allow you to restore your computer back to its original state in case of failure.
-
-If this program appears to have frozen, please make sure that the program is not waiting for you to press a key (indicated by "Press any key to continue . . ." on the screen). If pressing a key does nothing, hold the Control (CTRL) key, then press C, and then answer 'Y' to any prompts, then restart the program. 
+> [!TIP]
+>
+> If this program appears to have *frozen*, please make sure that the program **is not waiting for you to press a key** (indicated by "Press any key to continue . . ." on the screen). If pressing a key does nothing, hold the Control (`CTRL`) key, then press `C`, and then answer `Y` to any prompts, then restart the program. 
 
 Liability is clarified in the [LICENSE](github.com/laninternet/regchg/LICENSE) file.
 
 ## System Requirements
 
-REGCHG requires a computer with Windows Vista (6.0.6001) or over, with admin privileges available at any time. Unless stated, all functions are compatible with Windows Vista or over.
+REGCHG requires a computer with **Windows Vista (6.0.6001)** or over, with **admin privileges available at *any time***. Unless stated, *all functions* are compatible with Windows Vista or over.
 
 ## Functions 
 
@@ -86,7 +90,7 @@ Lan Internet recommends the use of these functions for a brand-new PC build.
 
 > [!NOTE]
 >
-> Using functions 4 and 5 will disable password expiry for all users. Use indiidual functions if you do not want this.
+> Using functions 4 and 5 will disable password expiry for all users. Use individual functions if you do not want this.
 
 ### 7) Copilot Removal
 
