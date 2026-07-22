@@ -39,7 +39,7 @@ echo [A] Enable Administrator Account
 echo [C] Change hostname (Computer name on a network)
 echo [W] Change workgroup (Network Sector)
 echo.
-echo Liability is clarified in the LICENSE of the REGCHG repository (https://github.com/laninternet/regchg)
+echo Liability is clarified in the LICENSE of the REGCHG repository (https://github.com/laninternet/regchg/LICENSE)
 echo.
 choice /c:1234567890MSFREACW /m "Choose an option : "
 IF ERRORLEVEL 18 GOTO WORKGR
@@ -609,9 +609,7 @@ echo.
 echo [1] Set custom executable for Windows Shell
 echo [2] Reset shell to C:\WINDOWS\EXPLORER.EXE
 echo [3] Return to Main Menu
-echo [4] Display Information Screen
-choice /c:12 /m "Choose an option: "
-IF ERRORLEVEL 4 GOTO INFO
+choice /c:123 /m "Choose an option: "
 IF ERRORLEVEL 3 GOTO START
 IF ERRORLEVEL 2 GOTO RESETSHELL
 IF ERRORLEVEL 1 GOTO SHCONFIG
@@ -629,7 +627,7 @@ echo 2: C:\WINDOWS\SYSTEM32\CMD.EXE /C pause
 echo 3: D:\downloads\idunno.exe --help
 echo 4: C:\Windows\Notepad.exe
 echo.
-echo NOTE: You must specify the FULL FILE PATH to your application and make sure that the file is USABLE (not read/write protected). If you do not respect this rule, Windows will NOT be able to find your application and will display a black screen upon startup (you will have to start the Task Manager and start this program again, and reconfigure it which is doable but annoying so it is best to avoid these troubles now)
+echo IMPORTANT: You must specify the FULL FILE PATH (with the drive letters, see the examples above) to your application and make sure that the file is USABLE (not read/write protected). If you do not respect this rule, Windows will NOT be able to find your application and will display a black screen upon startup (you will have to start the Task Manager and start this program again, and reconfigure it which is doable but annoying so it is best to avoid these troubles now)
 echo.
 set /p shell=Enter the path to your executable name and any command line arguments: 
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v Shell /t REG_SZ /d "%shell%" /f
