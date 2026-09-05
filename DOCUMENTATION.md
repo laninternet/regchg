@@ -96,7 +96,7 @@ Lan Internet recommends the use of these functions for a brand-new PC build.
 
 > [!NOTE]
 >
-> Using functions 4 and 5 will disable password expiry for all users. Use individual functions if you do not want this.
+> Using functions 6 and 5 will disable password expiry for all users. Use individual functions if you do not want this.
 
 ### 7) Copilot Removal
 
