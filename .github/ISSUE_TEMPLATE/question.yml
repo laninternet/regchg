@@ -1,0 +1,26 @@
+name: Question
+description: Ask a question about REGCHG
+title: "[Question]: "
+assignees:
+  - laninternet
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this question form!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: e.g. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: What is your question?
+      description: Write down what you are doubting about REGCHG and its relevant repository environment.
+      placeholder: Tell us what you are doubting about!
+    validations:
+      required: true
