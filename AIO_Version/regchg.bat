@@ -574,10 +574,6 @@ echo.
 echo ============================================
 echo   Importing certificates into Root store...
 echo ============================================
-set RESTARTCOMPUTER=1
-echo.
-pause
-goto END
 
 :: Import using PowerShell
 powershell -Command "Import-Certificate -FilePath 'roots.sst' -CertStoreLocation 'Cert:\LocalMachine\Root'"
@@ -586,6 +582,10 @@ echo.
 echo ============================================
 echo   Certificate update complete.
 echo ============================================
+set RESTARTCOMPUTER=1
+echo.
+pause
+goto END
 cls
 
 :FIX

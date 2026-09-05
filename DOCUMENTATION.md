@@ -24,6 +24,12 @@ Liability is clarified in the [LICENSE](github.com/laninternet/regchg/LICENSE) f
 
 REGCHG requires a computer with **Windows Vista (6.0.6001)** or over, with **admin privileges available at *any time***. Unless stated, *all functions* are compatible with Windows Vista or over.
 
+## Questions
+
+Any questions or doubt should be reported as an [issue](https://github.com/laninternet/regchg/issues). Use the relevant issue template please.
+
+For feature requests, ensure that your changes follow the contributing guidelines. Then, please submit a [pull request](https://github.com/laninternet/regchg/pulls) and wait for approval. 
+
 ## Functions 
 
 ### 1) Disable Bing Internet Search Results in Windows Search
@@ -116,7 +122,7 @@ This option quits the program.
 
 ### M) MAS (Microsoft Activation Scripts) Windows Activator
 
-This is a Windows Activator that allows you to activate Windows and Office through several methods. This function requires an internet connection (preferably with 256MB of usable data)
+This is a Windows Activator that allows you to activate Windows and Office through several methods. This function requires an internet connection (preferably with 256MB of available data connection, if you are using a metered or limited internet plan)
 
 > [!IMPORTANT] 
 > 
@@ -125,7 +131,7 @@ This is a Windows Activator that allows you to activate Windows and Office throu
 The command used to run MAS is:
 - `powershell /c "iex (curl.exe -s --doh-url https://1.1.1.1/dns-query https://get.activated.win | Out-String)"`
 
-This function may not be compatible with Windows 8.1 or below. Refer to the repository for more information. 
+This function may not be compatible with Windows 8.1 or below. Refer to the third-party program's repository for more information. 
 
 ### S) Windows Shell Utility
 
@@ -191,5 +197,29 @@ If REGCHG is configured as Windows 11, the `"HideIfEndabled"=dword:{value}` will
 
 ### A) Enable Administrator Accounts
 
+This option enables the built-in Administrator account, which may be required in order to perform certain Windows tasks and/or use certain programs.
+
+The command used is:
+- `net user Administrator /active:yes`
+
+### C) Change Hostname (Computer Name)
+
+Your computer has a name that it broadcasts alongisde its IP (192.168.xx.xx) on the network, which makes it easier to identify a PC on the network. This name can be changed to anything. 
+
+> [!NOTE]
+>
+> Please note that special characters such as $, * or £, as well as linguistic characters such as é, è or à may cause problems, therefore it is recomended not to use them.
+
+The registry keys used are:
+- `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName\ComputerName`
+- `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName\ComputerName`
+- `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameter\NV Hostname`
+- `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Hostname`
+
+### W) Change Workgroup (Network Sector)
+
+Windows computers (as well as some others) have a Workgroup associated to them. If you have multiple computers on the same network, you can change the workgroup associated to some computers.
+
+As an example, let `WORKGR` and `WORKGROUP` be 2 different workgroups on the same networks. Computers in the `WORKGR` workgroup are able to see other computers in the `WORKGR` workgroup. They cannot see computers in the `WORKGROUP` workgroup. The same is true for computers in `WORKGROUP`
 
 
