@@ -4,14 +4,6 @@ set RESTARTCOMPUTER=
 set WINVER= *** PLEASE CONFIGURE YOUR WINDOWS VERSION USING OPTION 5 ***
 set CONFIGURED=0
 set TITLE=Registry Editor 6.1
-echo Determining current user, please wait...
-for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=(Get-Process explorer -IncludeUserName | Select-Object -First 1 -ExpandProperty UserName); $a=New-Object System.Security.Principal.NTAccount($u); $a.Translate([System.Security.Principal.SecurityIdentifier]).Value"') do set "USERSID=%%S"
-if not defined USERSID (
-    echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
-    echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
-    pause
-    exit /b
-)
 setlocal enabledelayedexpansion
 net session >nul 2>&1
 if %errorLevel% neq 0 (
@@ -703,6 +695,14 @@ exit /b
 
 :W10
 echo.
+echo Determining current user, please wait...
+for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=(Get-Process explorer -IncludeUserName | Select-Object -First 1 -ExpandProperty UserName); $a=New-Object System.Security.Principal.NTAccount($u); $a.Translate([System.Security.Principal.SecurityIdentifier]).Value"') do set "USERSID=%%S"
+if not defined USERSID (
+    echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
+    echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
+    pause
+    exit /b
+)
 reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 set RESTARTCOMPUTER=1
 pause
@@ -711,6 +711,14 @@ goto END
 :EVERYTHING
 echo.
 net user administrator /active:yes
+echo Determining current user, please wait...
+for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=(Get-Process explorer -IncludeUserName | Select-Object -First 1 -ExpandProperty UserName); $a=New-Object System.Security.Principal.NTAccount($u); $a.Translate([System.Security.Principal.SecurityIdentifier]).Value"') do set "USERSID=%%S"
+if not defined USERSID (
+    echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
+    echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
+    pause
+    exit /b
+)
 reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /v BingSearchedEnabled /t REG_DWORD /d 0 /f
@@ -738,6 +746,14 @@ IF ERRORLEVEL 1 GOTO REALAIO
 :REALAIO
 echo.
 net user administrator /active:yes
+echo Determining current user, please wait...
+for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=(Get-Process explorer -IncludeUserName | Select-Object -First 1 -ExpandProperty UserName); $a=New-Object System.Security.Principal.NTAccount($u); $a.Translate([System.Security.Principal.SecurityIdentifier]).Value"') do set "USERSID=%%S"
+if not defined USERSID (
+    echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
+    echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
+    pause
+    exit /b
+)
 reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /v BingSearchedEnabled /t REG_DWORD /d 0 /f
