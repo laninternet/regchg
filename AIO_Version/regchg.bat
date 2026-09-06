@@ -3,7 +3,7 @@
 set RESTARTCOMPUTER=
 set WINVER= *** PLEASE CONFIGURE YOUR WINDOWS VERSION USING OPTION 5 ***
 set CONFIGURED=0
-set TITLE=Registry Editor 6
+set TITLE=Registry Editor 6.1
 setlocal enabledelayedexpansion
 net session >nul 2>&1
 if %errorLevel% neq 0 (
@@ -38,10 +38,12 @@ echo [E] Explorer Utilities
 echo [A] Enable Administrator Account
 echo [C] Change hostname (Computer name on a network)
 echo [W] Change workgroup (Network Sector)
+echo [B] Fix broken Administrator account (read DOCUMENTATION.MD for clarification)
 echo.
 echo Liability is clarified in the LICENSE of the REGCHG repository (https://github.com/laninternet/regchg/LICENSE)
 echo.
-choice /c:1234567890MSFREACW /m "Choose an option : "
+choice /c:1234567890MSFREACWB /m "Choose an option : "
+IF ERRORLEVEL 19 GOTO FIXADMIN
 IF ERRORLEVEL 18 GOTO WORKGR
 IF ERRORLEVEL 17 GOTO SETPC
 IF ERRORLEVEL 16 GOTO ADMIN
@@ -60,6 +62,13 @@ IF ERRORLEVEL 4 GOTO W10
 IF ERRORLEVEL 3 GOTO EDGE
 IF ERRORLEVEL 2 GOTO VBM
 IF ERRORLEVEL 1 GOTO WINSEARCH
+
+:FIXADMIN
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v FilterAdministratorToken /t REG_DWORD /d 0 /f
+echo.
+set RESTARTCOMPUTER=1
+pause
+goto END
 
 :WORKGR
 set /p WORG=Enter your desired workgroup name. If the workgroup in question does not exist, this program will create it for you. Note that special characters like $, * or £ may cause problems: 
@@ -682,10 +691,11 @@ IF ERRORLEVEL 1 GOTO REBOOT
 
 :REBOOT
 shutdown /r /t 10 /c "This computer will reboot in 10 seconds. Make sure to save all of your work. Changes will be applied during the reboot - REGCHG.BAT"
+exit /b
 
 :W10
 echo.
-reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve /d ""
 set RESTARTCOMPUTER=1
 pause
 goto END
@@ -693,7 +703,7 @@ goto END
 :EVERYTHING
 echo.
 net user administrator /active:yes
-reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve /d ""
 reg add HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /v BingSearchedEnabled /t REG_DWORD /d 0 /f
 reg add HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI /v DisableAIDataAnalysis /d 1 /f
@@ -720,7 +730,7 @@ IF ERRORLEVEL 1 GOTO REALAIO
 :REALAIO
 echo.
 net user administrator /active:yes
-reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve /d ""
 reg add HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /v BingSearchedEnabled /t REG_DWORD /d 0 /f
 reg add HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI /v DisableAIDataAnalysis /d 1 /f

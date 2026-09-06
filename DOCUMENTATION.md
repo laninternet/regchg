@@ -10,7 +10,7 @@ At any screen, press **the key marked in between brackets** to **select the func
 
 > [!IMPORTANT]
 >
->  If you do not own the computer, it is recommended to ask your **system administrator** for **permission** before using REGCHG, or ask to do the relevant changes in *Group Policy Editor (GPEdit.msc)*
+>  If you do not own the computer, it is recommended to ask your **system administrator** for **permission** before using REGCHG, or ask to do the relevant changes in *Group Policy Editor (GPEdit.msc)* or any relevant GUI policy editor that is approved by your system administrator. 
 >
 > If you are unsure that any of the following functions may affect your computer in a way that you do not expect, please **back up the registry**, as it will allow you to *restore your computer back to its original state* in case of failure.
 
@@ -86,7 +86,7 @@ In Windows 11, Microsoft has pushed a simplified version of the right click menu
 The registry keys used are:
 - `HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32`
 
-This function is only compatible with Windows 11 or above.
+This function is only compatible with Windows 11 or above. This value is set to an empty string now in order to maintain compatibility with newer Windows 11 versions.
 
 ### 5 and 6) "Everything" functions
 
@@ -96,7 +96,7 @@ Lan Internet recommends the use of these functions for a brand-new PC build.
 
 > [!NOTE]
 >
-> Using functions 6 and 5 will disable password expiry for all users. Use individual functions if you do not want this.
+> Using functions 5 and 6 will disable password expiry for all users. Use individual functions if you do not want this.
 
 ### 7) Copilot Removal
 
@@ -113,6 +113,7 @@ If there is no red text or error messages, this means that the operation was suc
 
 The command used for disabling password expiry for one user is:
 - `powershell /c Set-LocalUser -Name '%username%' -PasswordNeverExpires $true`
+
 The command used for disabling password expiry to the entire computer is:
 - `powershell /c "Get-LocalUser | Set-LocalUser -PasswordNeverExpires $true"`
 
@@ -175,7 +176,7 @@ The commands used are:
 - `certutil -generateSSTFromWU roots.sst`
 - `powershell -Command "Import-Certificate -FilePath 'roots.sst' -CertStoreLocation 'Cert:\LocalMachine\Root'"`
 
-### E) Wind tgows Explorer Utilities
+### E) Windows Explorer Utilities
 
 This function opens the Windows Explorer Utilities, which allow you to configure certain aspects of the main file manager, EXPLORER.EXE. 
 
@@ -221,5 +222,12 @@ The registry keys used are:
 Windows computers (as well as some others) have a Workgroup associated to them. If you have multiple computers on the same network, you can change the workgroup associated to some computers.
 
 As an example, let `WORKGR` and `WORKGROUP` be 2 different workgroups on the same networks. Computers in the `WORKGR` workgroup are able to see other computers in the `WORKGR` workgroup. They cannot see computers in the `WORKGROUP` workgroup. The same is true for computers in `WORKGROUP`
+
+### B) Fix broken Administrator account
+
+When upgrading from older versions of Windows 11 or Tiny11 22H2, you may find that the account `Administrator` no longer behaves as an administrator, in the sense that applications now run without admin by default. This function can revert the behaviour, in order that administrator runs anything with administrative privileges by default. 
+
+The registry key used is:
+- `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\FilterAdministratorToken`
 
 
