@@ -2,3 +2,4 @@
 powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName | Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace '.*\\',''; Get-LocalUser -Name $n | Select-Object -ExpandProperty SID"
 for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace '.*\\',''; Get-LocalUser -Name $n ^| Select-Object -ExpandProperty SID"') do set "USERSID=%%S"
 powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName | Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace '.*\\',''; (Get-LocalUser -Name $n).SID.Value"
+for /f "delims=" %S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace ''.*\\'',''''; Get-LocalUser -Name $n ^| ForEach-Object {$_.SID.Value}"') do set "USERSID=%S"
