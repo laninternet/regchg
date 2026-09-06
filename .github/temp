@@ -1,1 +1,3 @@
 {google:baseURL}search?q=%s&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:language}{google:prefetchSource}{google:searchClient}{google:sourceId}{google:contextualSearchVersion}ie={inputEncoding}
+powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName | Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace '.*\\',''; Get-LocalUser -Name $n | Select-Object -ExpandProperty SID"
+for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace '.*\\',''; Get-LocalUser -Name $n ^| Select-Object -ExpandProperty SID"') do set "USERSID=%%S"
