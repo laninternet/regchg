@@ -696,7 +696,7 @@ exit /b
 :W10
 echo.
 echo Determining current user, please wait...
-for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=^(Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName^); $a=New-Object System.Security.Principal.NTAccount^($u^); $a.Translate^([System.Security.Principal.SecurityIdentifier]^).Value"') do set "USERSID=%%S"
+for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace ''.*\\'',''''; (Get-LocalUser -Name $n).SID.Value"') do set "USERSID=%%S"
 if not defined USERSID (
     echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
     echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
@@ -712,7 +712,7 @@ goto END
 echo.
 net user administrator /active:yes
 echo Determining current user, please wait...
-for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=^(Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName^); $a=New-Object System.Security.Principal.NTAccount^($u^); $a.Translate^([System.Security.Principal.SecurityIdentifier]^).Value"') do set "USERSID=%%S"
+for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace ''.*\\'',''''; (Get-LocalUser -Name $n).SID.Value"') do set "USERSID=%%S"
 if not defined USERSID (
     echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
     echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
@@ -747,7 +747,7 @@ IF ERRORLEVEL 1 GOTO REALAIO
 echo.
 net user administrator /active:yes
 echo Determining current user, please wait...
-for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=^(Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName^); $a=New-Object System.Security.Principal.NTAccount^($u^); $a.Translate^([System.Security.Principal.SecurityIdentifier]^).Value"') do set "USERSID=%%S"
+for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace ''.*\\'',''''; (Get-LocalUser -Name $n).SID.Value"') do set "USERSID=%%S"
 if not defined USERSID (
     echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
     echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
