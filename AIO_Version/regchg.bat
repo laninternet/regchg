@@ -4,6 +4,14 @@ set RESTARTCOMPUTER=
 set WINVER= *** PLEASE CONFIGURE YOUR WINDOWS VERSION USING OPTION 5 ***
 set CONFIGURED=0
 set TITLE=Registry Editor 6.1
+echo Determining current user, please wait...
+for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=(Get-Process explorer -IncludeUserName | Select-Object -First 1 -ExpandProperty UserName); $a=New-Object System.Security.Principal.NTAccount($u); $a.Translate([System.Security.Principal.SecurityIdentifier]).Value"') do set "USERSID=%%S"
+if not defined USERSID (
+    echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
+    echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
+    pause
+    exit /b
+)
 setlocal enabledelayedexpansion
 net session >nul 2>&1
 if %errorLevel% neq 0 (
@@ -690,12 +698,12 @@ IF ERRORLEVEL 2 GOTO END
 IF ERRORLEVEL 1 GOTO REBOOT
 
 :REBOOT
-shutdown /r /t 10 /c "This computer will reboot in 10 seconds. Make sure to save all of your work. Changes will be applied during the reboot - REGCHG.BAT"
+shutdown /r /t 10 /c "This computer will reboot in 10 seconds, in order to apply any pending changes. Please save your work, any unsaved changes will be lost. - Registry Editor (REGCHG.BAT)"
 exit /b
 
 :W10
 echo.
-reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve /d ""
+reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 set RESTARTCOMPUTER=1
 pause
 goto END
@@ -703,7 +711,7 @@ goto END
 :EVERYTHING
 echo.
 net user administrator /active:yes
-reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve /d ""
+reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /v BingSearchedEnabled /t REG_DWORD /d 0 /f
 reg add HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI /v DisableAIDataAnalysis /d 1 /f
@@ -730,7 +738,7 @@ IF ERRORLEVEL 1 GOTO REALAIO
 :REALAIO
 echo.
 net user administrator /active:yes
-reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve /d ""
+reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /v BingSearchedEnabled /t REG_DWORD /d 0 /f
 reg add HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI /v DisableAIDataAnalysis /d 1 /f
