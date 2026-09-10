@@ -3,11 +3,22 @@
 set RESTARTCOMPUTER=
 set WINVER= *** PLEASE CONFIGURE YOUR WINDOWS VERSION USING OPTION 5 ***
 set CONFIGURED=0
-set TITLE=Registry Editor 6.1
+set TITLE=Registry Editor 6.3
+set USERSID=
 setlocal enabledelayedexpansion
+echo Determining current user SID, please wait...
+for /f "tokens=2" %%S in ('whoami /user ^| findstr /r /c:"S-1-"') do set "USERSID=%%S"
+if not defined USERSID (
+    echo WARNING! Current user SID could not be determined. This error may be caused by a corrupted user profile, or the 'whoami' command failing to run. Functions that rely on user SID detection may produce errors!
+    echo If you do not want to continue loading the program, please hold the Control (Ctrl) key, then press C. Answer 'Y' to any following prompts.
+    echo A delay of 15 seconds is present. Please read the above.
+    timeout /t 15 /nobreak
+    pause
+)
+echo Determining if admin privileges are present, please wait...
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo Please wait for admin privileges to be authorised. Admin privileges must be present in order for regchg to run properly.
+    echo Please wait for admin privileges to be authorised. Admin privileges must be present in order for regchg to run.
     powershell -Command "Start-Process cmd -ArgumentList '/c %~s0' -Verb RunAs"
     exit /b
 )
@@ -695,14 +706,6 @@ exit /b
 
 :W10
 echo.
-echo Determining current user, please wait...
-for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace ''.*\\'',''''; (Get-LocalUser -Name $n).SID.Value"') do set "USERSID=%%S"
-if not defined USERSID (
-    echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
-    echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
-    pause
-    goto END
-)
 reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 set RESTARTCOMPUTER=1
 pause
@@ -711,14 +714,6 @@ goto END
 :EVERYTHING
 echo.
 net user administrator /active:yes
-echo Determining current user, please wait...
-for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace ''.*\\'',''''; (Get-LocalUser -Name $n).SID.Value"') do set "USERSID=%%S"
-if not defined USERSID (
-    echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
-    echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
-    pause
-    goto END
-)
 reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /v BingSearchedEnabled /t REG_DWORD /d 0 /f
@@ -746,14 +741,6 @@ IF ERRORLEVEL 1 GOTO REALAIO
 :REALAIO
 echo.
 net user administrator /active:yes
-echo Determining current user, please wait...
-for /f "delims=" %%S in ('powershell -NoProfile -Command "$u=Get-Process explorer -IncludeUserName ^| Select-Object -First 1 -ExpandProperty UserName; $n=$u -replace ''.*\\'',''''; (Get-LocalUser -Name $n).SID.Value"') do set "USERSID=%%S"
-if not defined USERSID (
-    echo ERROR: Could not determine current user (user SID). Function will not run in order to prevent damage to your computer.
-    echo This issue may be caused by a corrupt user profile or a user profile configuration problem.
-    pause
-    goto END
-)
 reg.exe add "HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer /v DisableSearchBoxSuggestions /t REG_DWORD /d 1 /f
 reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search /v BingSearchedEnabled /t REG_DWORD /d 0 /f
