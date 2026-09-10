@@ -10,7 +10,7 @@ echo Determining current user SID, please wait...
 for /f "tokens=2" %%S in ('whoami /user ^| findstr /r /c:"S-1-"') do set "USERSID=%%S"
 if not defined USERSID (
     echo WARNING! Current user SID could not be determined. This error may be caused by a corrupted user profile, or the 'whoami' command failing to run. Functions that rely on user SID detection may produce errors!
-    echo If you do not want to continue loading the program, please hold the Control (Ctrl) key, then press C. Answer 'Y' to any following prompts.
+    echo If you do not want to continue loading the program, please hold the Control [Ctrl] key, then press C. Answer 'Y' to any following prompts.
     echo A delay of 15 seconds is present. Please read the above.
     timeout /t 15 /nobreak
     pause
