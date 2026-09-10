@@ -29,7 +29,7 @@ echo *** %TITLE% - (c) Lan Internet Software ***
 echo.
 echo This program allows you to change certain Windows features and behaviours. 
 echo In any doubt of anything, or if this is the first time using this program, consult the DOCUMENTATIONS.md file in the Lan Internet REGCHG repository.
-echo.
+echo Current user SID: %USERSID%
 echo In the "Everything" options, all users will have their password expiry disabled.
 echo [1] Disable Bing/Internet Start Menu Search Results
 echo [2] Enable Verbose Boot Messages - This will make boot messages more precise (read DOCUMENTATION.md for clarification)
