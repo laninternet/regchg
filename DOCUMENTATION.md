@@ -10,7 +10,7 @@ At any screen, press **the key marked in between brackets** to **select the func
 
 > [!IMPORTANT]
 >
->  If you do not own the computer, it is recommended to ask your **system administrator** for **permission** before using REGCHG, or ask to do the relevant changes in *Group Policy Editor (GPEdit.msc)* or any relevant GUI policy editor that is approved by your system administrator. 
+>  If you do not own the computer, it is recommended to ask your **system administrator** for **permission** before using REGCHG, or ask to do the relevant changes in *Group Policy Editor (GPEdit.msc)* or any relevant policy editor that is approved by your system administrator. 
 >
 > If you are unsure that any of the following functions may affect your computer in a way that you do not expect, please **back up the registry**, as it will allow you to *restore your computer back to its original state* in case of failure.
 
@@ -83,20 +83,27 @@ This function only applies to Windows versions with Microsoft Edge preinstalled,
 
 In Windows 11, Microsoft has pushed a simplified version of the right click menu, which hides some options. This function restored the Windows 10 Right-click menu, which allows you to see all options without clicking "See more options".
 
-The registry keys used are:
-- `HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32`
+The registry key used is:
+- `HKU\%USERSID%\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32`
 
 This function is only compatible with Windows 11 or above. This value is set to an empty string now in order to maintain compatibility with newer Windows 11 versions.
 
+> [!IMPORTANT]
+>
+> This function only applies to the current user running regchg, not for the entire computer. Thank you for your understanding.
+> [!NOTE]
+>
+> Some PCs may require the HLKM override in order for changes to be applied.
+
 ### 5 and 6) "Everything" functions
 
-Both of these functions will execute functions 1, 2, 4, 7 and 8, with option 5 only executing option 3. See the corresponding options for more information.
+Both of these functions will execute functions 1, 2, 4, 7 and 8, with option 5 executing as well option 3. See the corresponding option's documentation for more information.
 
 Lan Internet recommends the use of these functions for a brand-new PC build.
 
 > [!NOTE]
 >
-> Using functions 5 and 6 will disable password expiry for all users. Use individual functions if you do not want this.
+> Using functions 5 and 6 will disable password expiry for all users. Use individual functions if you do not want this functionality.
 
 ### 7) Copilot Removal
 
@@ -148,7 +155,7 @@ On startup, Windows loads the Shell. The Shell will be the main user interface f
 
 > [!IMPORTANT]
 >
->  You must specify the FULL FILE PATH (with the drive letter included, see the examples above) to your application and make sure that the file is USABLE (not read/write protected). If you do not respect this rule, Windows will NOT be able to find your application and will display a black screen upon startup (you will have to start the `Task Manager` and start this program again, and reconfigure it which is doable but annoying so it is best to avoid these troubles now)
+>  You must specify the FULL FILE PATH (with the drive letter included, see the examples above) to your application and make sure that the file is USABLE (not read/write protected). If you do not respect this rule, Windows will NOT be able to find your application and will display a black screen upon startup (you will have to start the `Task Manager` and start this program again, and reconfigure it which is possible but not very easy for novice users, so it is best to avoid creating problems)
 
 The registry key used is:
 - `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell`
